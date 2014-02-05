@@ -20,10 +20,12 @@
   <script src="scripts/popover.js"></script>
   <script src="scripts/l.control.geosearch.js"></script>
   <script src="scripts/l.geosearch.provider.openstreetmap.js"></script>
-  <link rel="stylesheet" href="styles/leaflet.css" />
-  <link href="styles/zomaar.css" rel="stylesheet" type="text/css">
+  <script src="scripts/L.Map.Sync.js"></script>
+  
+  <link rel="stylesheet" href="styles/leaflet.boswijzer.css" />
+  <link href="styles/boswijzer.css" rel="stylesheet" type="text/css">
   <link href="styles/bootstrap.css" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="styles/l.geosearch.css" />
+  <link rel="stylesheet" href="styles/l.geosearch.boswijzer.css" />
   <script type="text/javascript">
  function visibility(divID) {
  var item = document.getElementById(divID);
@@ -34,7 +36,10 @@
  </script>
 </head>
 <body>
-<div id='map'>
+<div id='map1'>
+<div id='map-ui'></div>
+</div>
+<div id='map2'>
 <div id='map-ui'></div>
 </div>
 <div id='klapuit' class="hidden">
@@ -49,7 +54,7 @@
 <a href="#" onclick="visibility('klapuit');"> <img src="pics/arrowleft.png" alt="IN" /></a>
  </div>
 <div id='content-title'>
-<h1>Hoe wijs is de boswijzer?</h1> 
+<h2>Hoe wijs is de boswijzer?</h2> 
 </div>
 <div id='content-txt'>
 Om de 3 jaar wordt een nieuwe <code id="example1" class="nocode" rel="popover" data-trigger="hover" data-container="body" data-content="De
@@ -63,16 +68,16 @@ dat er meer dan 8000 hectare <code id="example3" class="nocode" rel="popover" da
 "Waneer zien we eigenlijk door de bomen een bos? In de boswijzer wordt bos gedefinieerd als volgt: minimum 0,5 ha groot, lengte/breedte verhouding minstens 2,5 
 en minimum 50% bedekking." data-original-title= "Definitie bos" 
 ;> bos </code> is bijgekomen in Vlaanderen. Deze cijfers stuiten echter op veel ongeloof. 
-De boswijzer zou ook rekening houden met bossen die spontaan zijn ontstaan, maar de kritiek zwelt aan. Hier kan U zelf de boswijzer beoordelen. Rechts bovenaan de kaart kan u
-de Boswijzers van 2013 en 2011 selecteren. Deze Boswijzers zijn respectievelijk gebaseerd op de <code id="example2" class="nocode" rel="popover" data-trigger="hover" 
+De boswijzer zou ook rekening houden met bossen die spontaan zijn ontstaan, maar de kritiek zwelt aan. Hier kan U zelf de boswijzer beoordelen. Links ziet u de boswijzer van 2011, 
+rechts die van 2013. Deze Boswijzers zijn respectievelijk gebaseerd op de <code id="example2" class="nocode" rel="popover" data-trigger="hover" 
 data-container="body" data-content="De luchtfoto's die hier getoond worden worden 'live' gestreamd van het Agentschap voor Geografische Informatie Vlaanderen, kortweg AGIV. Zij
 staan in voor het optimaal gebruik van geografische informatie binnen de Vlaamse overheid te stimuleren en te coÃ¶rdineren. Hou er rekening mee dat het
-even kan duren vooraleer de luchtfoto's in geladen zijn." data-original-title= "Bron luchtfoto's";> luchtfoto's </code> van 2012 en 2009. Deze kan u hier ook bekijken. 
+even kan duren vooraleer de luchtfoto's in geladen zijn." data-original-title= "Bron luchtfoto's";> luchtfoto's </code> van 2012 en 2009. 
+U kan telkens rechts bovenaan de kaart de verschillende lagen selecteren. 
 Zo ziet u <code id="example4" class="nocode" rel="popover" data-trigger="hover" data-container="body" data-content=
 "Wij vinden dat de boswijzer een nuttige tool kan zijn. Ze vraagt echter een correcte interpretatie, validatie en communicatie. Een juiste inschatting van de foutenmarge
 is cruciaal. De kartering van bos is zowiezo geen gemakkelijke opdracht en al zeker niet wanneer dient vergeleken te worden tussen verschillende jaren." data-original-title= 
-"Onze mening" ;> zelf </code> welke bossen in kaart gebracht worden door de boswijzer en hoe volledig deze is. We voegen hier ook 2 voorbeelden toe van nieuw bos die via 
-de website van het Agentschap Natuur en Bos werden vrijgegeven (zie tags op de kaart).</br>
+"Onze mening" ;> zelf </code> welke bossen in kaart gebracht worden door de boswijzer en hoe volledig deze is. 
 </div>
 <div id='subcontent'>De luchtfoto's en boswijzer worden als WMS-lagen ingeladen via AGIV (Agentschap voor Geografische Informatie Vlaanderen)</br>
 De informatie omtrent de methodiek van de boswijzer en de nieuwe bossen in Lokeren en Turnhout zijn afkomstig van de website van Agentschap Natuur en Bos
@@ -81,17 +86,22 @@ De informatie omtrent de methodiek van de boswijzer en de nieuwe bossen in Loker
 
 <script>
 // add map template + geocoder control
-var map = L.map ('map', { zoomControl: false }, {
+var map1 = L.map ('map1', { zoomControl: false }, {
 	zoomAnimation: true
 	}).setView([51.357,4.92], 16);
-new L.Control.Zoom({ position: 'topright' }).addTo(map);
+new L.Control.Zoom({ position: 'topright' }).addTo(map1);
+
+var map2 = L.map ('map2', { zoomControl: false }, {
+	zoomAnimation: true
+	}).setView([51.357,4.92], 16);
+new L.Control.Zoom({ position: 'topright' }).addTo(map2);
 
 //add geosearcher based on openstreetmap (gelinkd aan geosearch js + provider.js + css)
 new L.Control.GeoSearch({
     provider: new L.GeoSearch.Provider.OpenStreetMap(),
 	//geef suggesties voor autocomplete - lijkt niet te werken voor openstreetmap
 	enableAutocomplete:true
-}).addTo(map);
+}).addTo(map2);
 
 //cloudmade tile layer aangemaakt (account ides.bauwens@gmail.com met eigen api-key 66c612493a5d4c23a59bc0c68014a9c4 
 //mapachtergrond style 'boswijzer', #120942
@@ -105,8 +115,14 @@ var Achtergrond = L.tileLayer('http://{s}.tile.cloudmade.com/66c612493a5d4c23a59
 	noWrap: true,
 //	reuseTiles: true,  //niet duidelijk of dit inladen versnelt
  maxZoom: 18
-}).addTo(map);
+}).addTo(map1);
 
+var Achtergrond = L.tileLayer('http://{s}.tile.cloudmade.com/66c612493a5d4c23a59bc0c68014a9c4/1/256/{z}/{x}/{y}.png', {
+ attribution: '<a href="http://www.nazka.be">nazka mapps</a>', 
+	noWrap: true,
+//	reuseTiles: true,  //niet duidelijk of dit inladen versnelt
+ maxZoom: 18
+}).addTo(map2);
 
 /*map.fitBounds([
     [50.3, 2],
@@ -119,70 +135,53 @@ var Achtergrond = L.tileLayer('http://{s}.tile.cloudmade.com/66c612493a5d4c23a59
     paddingTopLeft: [300, 0]
 })*/
 
-//Als u in Leaflet gebruik wil maken van Tile.Layer kan men beter gebruik maken van het TMS endpoint: http://grb.agiv.be/geodiensten/raadpleegdiensten/geocache/tms/.... 
-//en gebruik maken van de option “tms” zoals beschreven op http://leafletjs.com/reference.html#tilelayer
-var Luchtfotos2012 = new L.tileLayer('http://grb.agiv.be/geodiensten/raadpleegdiensten/geocache/tms/1.0.0/orthoklmx@GoogleMapsVL/{z}/{x}/{y}.png', {
-	format: 'image/png',
-	tms: 'true',
-	continuousWorld: 'true',
-});
-
 //add WMS layers
 
 var Boswijzer2013 = L.tileLayer.wms("http://geo.agiv.be/ogc/wms/product/ANB?", {
     format: 'img/png',
     transparent: true,
     layers: 'Boswijz13'
-}).addTo(map);
+}).addTo(map2);
 
 var Boswijzer2010 = L.tileLayer.wms("http://geo.agiv.be/ogc/wms/product/ANB?", {
     format: 'img/png',
     transparent: true,
     layers: 'Boswijz10'
-});
+}).addTo(map1);
 
 var Luchtfotos2009 = L.tileLayer.wms("http://wms.agiv.be/inspire/wms/Orthobeeldvorming", {
     format: 'image/png',
     transparent: true,
     layers: 'OMZ09VLRGB'
-});
+}).addTo(map1);
 
-// add hover markers -> werkt nog niet, nog verder uit te zoeken!!
+//Als u in Leaflet gebruik wil maken van Tile.Layer kan men beter gebruik maken van het TMS endpoint: http://grb.agiv.be/geodiensten/raadpleegdiensten/geocache/tms/.... 
+//en gebruik maken van de option “tms” zoals beschreven op http://leafletjs.com/reference.html#tilelayer
 
-/*var geoJson = {
-    type: 'FeatureCollection',
-    features: [{
-        type: 'Feature',
-        properties: {
-            title: 'Boswijzer',
-        },
-        geometry: {
-            type: 'Point',
-            coordinates: [50.8, 4]
-        }
-    }]
-};
-
-map.markerLayer.setGeoJSON(geoJson);
-map.markerLayer.on('mouseover', function(e) {
-    e.layer.openPopup();
-});
-map.markerLayer.on('mouseout', function(e) {
-    e.layer.closePopup();
-});*/
+var Luchtfotos2012 = new L.tileLayer('http://grb.agiv.be/geodiensten/raadpleegdiensten/geocache/tms/1.0.0/orthoklmx@GoogleMapsVL/{z}/{x}/{y}.png', {
+	format: 'image/png',
+	tms: 'true',
+	continuousWorld: 'true',
+}).addTo(map2);
 
 //add control layers
+
 var baseMaps = {
 };
 
-var overlayMaps = {
-    "Boswijzer 2010": Boswijzer2010,
+var overlayMaps1 = {
     "Luchtfoto's zomer 2009": Luchtfotos2009,
+	"Boswijzer 2010": Boswijzer2010,
+};
+
+var overlayMaps2 = {
 	"Luchtfoto's zomer 2012": Luchtfotos2012,
 	"Boswijzer 2013": Boswijzer2013,
 };
 
-L.control.layers(baseMaps, overlayMaps).addTo(map);
+L.control.layers(baseMaps, overlayMaps1).addTo(map1);
+
+L.control.layers(baseMaps, overlayMaps2).addTo(map2);
 
 
 //popovers
@@ -210,6 +209,12 @@ $(function ()
  $( "#klapuit" ).click(function() {
   $( "#content" ).animate({width: 'toggle'});
 });
+
+
+// add sync
+
+map1.sync(map2);
+map2.sync(map1);
 
 </script>
 </body>

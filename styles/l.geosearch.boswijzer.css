@@ -1,10 +1,10 @@
 .leaflet-center {
-	width: 35%; /*was ervoor 40%*/
+	width: 50%; /*was ervoor 40%*/
 	margin-left: auto;
 	margin-right: auto;
 	position: relative;
 	float: left; /*was ervoor right*/
-	left: 430px; /*deze lijn is zelf toegevoegd*/
+	left: 10px; /*deze lijn is zelf toegevoegd*/
 	padding-right: 50px;
 }
 .leaflet-control-geosearch, .leaflet-control-geosearch ul {

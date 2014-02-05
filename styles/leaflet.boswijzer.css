@@ -279,10 +279,9 @@
 	border-radius: 5px;
 	}
 .leaflet-control-layers-toggle {
-	background-image: url(images/legende.png);
-	background-size: 60px 60px;
-	width: 72px; /*ervoor 36px*/
-	height: 72px; /*ervoor 36px*/
+	background-image: url(images/layers.png);
+	width: 36px; /*ervoor 36px*/
+	height: 36px; /*ervoor 36px*/
 	}
 .leaflet-retina .leaflet-control-layers-toggle {
 	background-image: url(images/layers-2x.png);
