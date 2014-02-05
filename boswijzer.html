@@ -12,19 +12,18 @@
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();	</script>
-  <script async="" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-  <script src='http://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.js'></script>
+  <script src="scripts/jquery-1.10.2.min.js"></script>
+  <script src="scripts/leaflet.js"></script>
   <script src="scripts/quattrocento-sans.js"></script>
-  <script src="scripts/angular.min.js"></script>
   <script src="scripts/bootstrap.min.js"></script>
   <script src="scripts/tooltip.js"></script>
   <script src="scripts/popover.js"></script>
-  <link href='http://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.css' rel='stylesheet' />
-  <!--[if lte IE 8]>
-    <link href='//api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.ie.css' rel='stylesheet'>
-  <![endif]-->
+  <script src="scripts/l.control.geosearch.js"></script>
+  <script src="scripts/l.geosearch.provider.openstreetmap.js"></script>
+  <link rel="stylesheet" href="styles/leaflet.css" />
   <link href="styles/zomaar.css" rel="stylesheet" type="text/css">
   <link href="styles/bootstrap.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="styles/l.geosearch.css" />
   <script type="text/javascript">
  function visibility(divID) {
  var item = document.getElementById(divID);
@@ -82,12 +81,33 @@ De informatie omtrent de methodiek van de boswijzer en de nieuwe bossen in Loker
 
 <script>
 // add map template + geocoder control
-var map = L.mapbox.map('map', 'nazka-mapps.map-3c8b5n55', { zoomControl: false }, {
+var map = L.map ('map', { zoomControl: false }, {
 	zoomAnimation: true
-	}).setView([51.357,4.92], 16).addControl(L.mapbox.geocoderControl('nazka-mapps.map-3c8b5n55'));
+	}).setView([51.357,4.92], 16);
 new L.Control.Zoom({ position: 'topright' }).addTo(map);
 
-		
+//add geosearcher based on openstreetmap (gelinkd aan geosearch js + provider.js + css)
+new L.Control.GeoSearch({
+    provider: new L.GeoSearch.Provider.OpenStreetMap(),
+	//geef suggesties voor autocomplete - lijkt niet te werken voor openstreetmap
+	enableAutocomplete:true
+}).addTo(map);
+
+//cloudmade tile layer aangemaakt (account ides.bauwens@gmail.com met eigen api-key 66c612493a5d4c23a59bc0c68014a9c4 
+//mapachtergrond style 'boswijzer', #120942
+//{s}.tile.cloudmade.com/... kan vervangen w door b.tile.cloudmade.com/... wat gaat sneller ??? switchen naar a., b., c. S en zonder? // 
+//je kan de resolutie van de kaarten verhogen voor retina display door @2x toe te voegen achter de style code
+//het goede aan cloudmade is dat je op elke zoomniveau kan bepalen wat er wordt weergegeven en wat niet, van eenvoudige naar gedetailleerde kaart --> super !!!
+//500k tiles gratis per maand
+
+var Achtergrond = L.tileLayer('http://{s}.tile.cloudmade.com/66c612493a5d4c23a59bc0c68014a9c4/1/256/{z}/{x}/{y}.png', {
+ attribution: '<a href="http://www.nazka.be">nazka mapps</a>', 
+	noWrap: true,
+//	reuseTiles: true,  //niet duidelijk of dit inladen versnelt
+ maxZoom: 18
+}).addTo(map);
+
+
 /*map.fitBounds([
     [50.3, 2],
     [51.5, 6]
@@ -98,6 +118,14 @@ new L.Control.Zoom({ position: 'topright' }).addTo(map);
     // for full documentation and other options
     paddingTopLeft: [300, 0]
 })*/
+
+//Als u in Leaflet gebruik wil maken van Tile.Layer kan men beter gebruik maken van het TMS endpoint: http://grb.agiv.be/geodiensten/raadpleegdiensten/geocache/tms/.... 
+//en gebruik maken van de option “tms” zoals beschreven op http://leafletjs.com/reference.html#tilelayer
+var Luchtfotos2012 = new L.tileLayer('http://grb.agiv.be/geodiensten/raadpleegdiensten/geocache/tms/1.0.0/orthoklmx@GoogleMapsVL/{z}/{x}/{y}.png', {
+	format: 'image/png',
+	tms: 'true',
+	continuousWorld: 'true',
+});
 
 //add WMS layers
 
@@ -112,12 +140,6 @@ var Boswijzer2010 = L.tileLayer.wms("http://geo.agiv.be/ogc/wms/product/ANB?", {
     transparent: true,
     layers: 'Boswijz10'
 });
-
-var Luchtfotos2012 = L.tileLayer.wms("http://wms.agiv.be/inspire/wms/Orthobeeldvorming", {
-    format: 'image/png',
-    transparent: true,
-    layers: 'RGB'
-}).addTo(map);
 
 var Luchtfotos2009 = L.tileLayer.wms("http://wms.agiv.be/inspire/wms/Orthobeeldvorming", {
     format: 'image/png',
