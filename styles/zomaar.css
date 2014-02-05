@@ -19,8 +19,8 @@
 
 #klapin {
     position:absolute;
-    top:60px;
-    left:450px;
+    top:10px;
+    left:400px;
     width:20px;
 }
 
@@ -50,23 +50,13 @@
 	border-radius: 5px;
 }
 
-#supercontent {
-    position:absolute;
-    top:0;
-    left:0;
-    width:650px;
-    bottom:0;
-	overflow:hidden;
-	z-index:99;
-}
-
 #subcontent {
     position:absolute;
     left:10px;
     bottom:10px;
 	right:10px;
     font-size:8pt;
-	color:white;
+	color: rgba (84,159,156,1);
 }
 
 #content {
@@ -75,13 +65,12 @@
     left:0;
     width:450px;
     bottom:0;
-    background:#000;
-    background:rgba(0, 0, 0, 0.5);
+    background:rgba(255, 255, 255, 0.8);
 }
 
 #content-title {
 	position: absolute;
-	top: 35px;
+	top: 60px;
 	left: 10px;
 	clear: both;
 	float: left;
@@ -89,12 +78,12 @@
 	width: 100%;
 	display: block;
 	padding: 0;
-	color: white;
+	color: rgba (84,159,156,1);
 }
 
 #content-txt {
 	position: absolute;
-	top: 110px;
+	top: 140px;
 	left: 10px;
 	clear: both;
 	float: left;
@@ -102,7 +91,7 @@
 	width: 420px;
 	display: block;
 	padding: 0;
-	color: white;
+	color: rgba (84,159,156,1);
 	text-align: justify;
 	line-height: 25px;
 }

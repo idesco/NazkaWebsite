@@ -44,7 +44,7 @@
 <div id='logo'>
 <a href="http://www.nazka.be/mapps_nl.html"><img src="pics/nazka_logo.png" width="36px" alt="nazka"/></a>
 </div>
-<div id='supercontent'>
+
 <div id='content'>
 <div id='klapin'>
 <a href="#" onclick="visibility('klapuit');"> <img src="pics/arrowleft.png" alt="IN" /></a>
@@ -53,23 +53,23 @@
 <h1>Hoe wijs is de boswijzer?</h1> 
 </div>
 <div id='content-txt'>
-Om de 3 jaar wordt een nieuwe <code id="example1" class="nocode" rel="popover" data-trigger="hover" data-content="De
+Om de 3 jaar wordt een nieuwe <code id="example1" class="nocode" rel="popover" data-trigger="hover" data-container="body" data-content="De
 boswijzer brengt de Vlaamse bossen in kaart op basis van luchtfoto's in combinatie met hoogte-data. De methode is 
 objectief en geautomatiseerd zodat ze in de toekomst eenvoudig kan herhaald worden. Dit maakt volgens Agentschap 
 Natuur en Bos van de Boswijzer een handig instrument om de evolutie van de bosoppervlakte in Vlaanderen op te volgen.
 De Boswijzer 2010 is de eerste boswijzer die op deze methodiek gestoeld is en geldt dan ook als referentie voor de 
 volgende metingen. Eerdere boskarteringen hanteerden een andere methode." data-original-title= "De Boswijzer" 
 ;>boswijzer</code> gemaakt op basis van luchtfoto's en hoogtegegevens. Zo blijkt uit de resultaten van de boswijzers van 2010 en 2013
-dat er meer dan 8000 hectare <code id="example3" class="nocode" rel="popover" data-trigger="hover" data-content=
+dat er meer dan 8000 hectare <code id="example3" class="nocode" rel="popover" data-trigger="hover" data-container="body" data-content=
 "Waneer zien we eigenlijk door de bomen een bos? In de boswijzer wordt bos gedefinieerd als volgt: minimum 0,5 ha groot, lengte/breedte verhouding minstens 2,5 
 en minimum 50% bedekking." data-original-title= "Definitie bos" 
 ;> bos </code> is bijgekomen in Vlaanderen. Deze cijfers stuiten echter op veel ongeloof. 
-De boswijzer zou ook rekening houden met bossen die spontaan zijn ontstaan, maar de kritiek zwelt aan. Hier kan U zelf de boswijzer beoordelen. In afwachting tot de boswijzer van 2013 wordt vrijgegeven, kan U 
-de boswijzer van 2010 vergelijken met de <code id="example2" class="nocode" rel="popover" data-trigger="hover" data-content=
-"De luchtfoto's die hier getoond worden worden 'live' gestreamd van het Agentschap voor Geografische Informatie Vlaanderen, kortweg AGIV. Zij
+De boswijzer zou ook rekening houden met bossen die spontaan zijn ontstaan, maar de kritiek zwelt aan. Hier kan U zelf de boswijzer beoordelen. Rechts bovenaan de kaart kan u
+de Boswijzers van 2013 en 2011 selecteren. Deze Boswijzers zijn respectievelijk gebaseerd op de <code id="example2" class="nocode" rel="popover" data-trigger="hover" 
+data-container="body" data-content="De luchtfoto's die hier getoond worden worden 'live' gestreamd van het Agentschap voor Geografische Informatie Vlaanderen, kortweg AGIV. Zij
 staan in voor het optimaal gebruik van geografische informatie binnen de Vlaamse overheid te stimuleren en te coördineren. Hou er rekening mee dat het
-even kan duren vooraleer de luchtfoto's in geladen zijn." data-original-title= "Bron luchtfoto's" 
-;> luchtfoto's </code> van 2009 en 2012. Zo ziet u <code id="example4" class="nocode" rel="popover" data-trigger="hover" data-content=
+even kan duren vooraleer de luchtfoto's in geladen zijn." data-original-title= "Bron luchtfoto's";> luchtfoto's </code> van 2012 en 2009. Deze kan u hier ook bekijken. 
+Zo ziet u <code id="example4" class="nocode" rel="popover" data-trigger="hover" data-container="body" data-content=
 "Wij vinden dat de boswijzer een nuttige tool kan zijn. Ze vraagt echter een correcte interpretatie, validatie en communicatie. Een juiste inschatting van de foutenmarge
 is cruciaal. De kartering van bos is zowiezo geen gemakkelijke opdracht en al zeker niet wanneer dient vergeleken te worden tussen verschillende jaren." data-original-title= 
 "Onze mening" ;> zelf </code> welke bossen in kaart gebracht worden door de boswijzer en hoe volledig deze is. We voegen hier ook 2 voorbeelden toe van nieuw bos die via 
@@ -79,7 +79,7 @@ de website van het Agentschap Natuur en Bos werden vrijgegeven (zie tags op de k
 De informatie omtrent de methodiek van de boswijzer en de nieuwe bossen in Lokeren en Turnhout zijn afkomstig van de website van Agentschap Natuur en Bos
 </div>
 </div>
-</div>
+
 <script>
 // add map template + geocoder control
 var map = L.mapbox.map('map', 'nazka-mapps.map-3c8b5n55', { zoomControl: false }, {
@@ -101,11 +101,17 @@ new L.Control.Zoom({ position: 'topright' }).addTo(map);
 
 //add WMS layers
 
+var Boswijzer2013 = L.tileLayer.wms("http://geo.agiv.be/ogc/wms/product/ANB?", {
+    format: 'img/png',
+    transparent: true,
+    layers: 'Boswijz13'
+}).addTo(map);
+
 var Boswijzer2010 = L.tileLayer.wms("http://geo.agiv.be/ogc/wms/product/ANB?", {
     format: 'img/png',
     transparent: true,
     layers: 'Boswijz10'
-}).addTo(map);
+});
 
 var Luchtfotos2012 = L.tileLayer.wms("http://wms.agiv.be/inspire/wms/Orthobeeldvorming", {
     format: 'image/png',
@@ -117,7 +123,7 @@ var Luchtfotos2009 = L.tileLayer.wms("http://wms.agiv.be/inspire/wms/Orthobeeldv
     format: 'image/png',
     transparent: true,
     layers: 'OMZ09VLRGB'
-}).addTo(map);
+});
 
 // add hover markers -> werkt nog niet, nog verder uit te zoeken!!
 
@@ -148,9 +154,10 @@ var baseMaps = {
 };
 
 var overlayMaps = {
+    "Boswijzer 2010": Boswijzer2010,
     "Luchtfoto's zomer 2009": Luchtfotos2009,
 	"Luchtfoto's zomer 2012": Luchtfotos2012,
-    "Boswijzer 2010": Boswijzer2010,
+	"Boswijzer 2013": Boswijzer2013,
 };
 
 L.control.layers(baseMaps, overlayMaps).addTo(map);
@@ -175,11 +182,11 @@ $(function ()
 
 //div slide
  $( "#klapin" ).click(function() {
-  $( "#supercontent" ).animate({width: 'toggle'});
+  $( "#content" ).animate({width: 'toggle'});
 });
 
  $( "#klapuit" ).click(function() {
-  $( "#supercontent" ).animate({width: 'toggle'});
+  $( "#content" ).animate({width: 'toggle'});
 });
 
 </script>
